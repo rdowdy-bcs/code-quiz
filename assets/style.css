@@ -14,3 +14,7 @@ header button {
     list-style: none;
     height: 40px;
 }
+
+#high-scores-section {
+    display: none;
+}
