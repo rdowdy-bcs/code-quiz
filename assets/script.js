@@ -2,6 +2,13 @@ var startQuizBtn = document.querySelector("#start-quiz-btn");
 var possibleAnswersEl = document.querySelector("#possible-answers");
 var quizQuestionEl = document.querySelector("#quiz-question");
 var highScoresEl = document.querySelector("#high-scores-section");
+var timerEl = document.querySelector("#timer");
+var rightOrWrongEl = document.querySelector("#right-or-wrong");
+
+var TIMER_START_SECONDS = 60;
+
+var timer;
+var timerIntervalId;
 
 var questions = [
     {
@@ -29,10 +36,25 @@ var questions = [
 startQuizBtn.addEventListener("click", startQuiz);
 
 function startQuiz() {
+    initTimer();
     moveToQuestion(0);
+    
     highScoresEl.setAttribute("style", "display: none;");
     startQuizBtn.setAttribute("style", "display: none;");
-    
+}
+
+function initTimer() {
+    timer = TIMER_START_SECONDS;
+    timerEl.textContent = timer;
+
+    timerIntervalId = setInterval(function() {
+        if (timer > 0) {
+            timer--;
+            timerEl.textContent = timer;
+        } else {
+            handleEndOfQuiz();
+        }
+    }, 1000);
 }
 
 function moveToQuestion(nextQuestionIndex) {
@@ -55,9 +77,11 @@ function moveToQuestion(nextQuestionIndex) {
 
         li.addEventListener("click", function(event) {
             if (event.target.textContent === currentQuestion.correctAnswer) {
-                console.log("Correct Answer");
+                timer += 5; // timer = timer + 5
+                rightOrWrongEl.textContent = "Correct!";
             } else {
-                console.log("Wrong Answer");
+                timer -= 5; // timer = timer - 5
+                rightOrWrongEl.textContent = "Wrong!";
             }
 
             moveToQuestion(nextQuestionIndex + 1);
@@ -74,4 +98,5 @@ function handleEndOfQuiz() {
     highScoresEl.setAttribute("style", "display: block;");
     startQuizBtn.setAttribute("style", "display: block;");
     startQuizBtn.textContent = "Try Again";
+    clearInterval(timerIntervalId);
 }
