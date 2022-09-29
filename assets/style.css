@@ -1,0 +1,16 @@
+header h1 {
+    text-align: center;
+}
+
+header button {
+    width: 100px;
+    height: 40px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#possible-answers li {
+    font-size: 24px;
+    list-style: none;
+    height: 40px;
+}
