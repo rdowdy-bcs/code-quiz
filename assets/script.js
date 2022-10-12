@@ -4,6 +4,10 @@ var quizQuestionEl = document.querySelector("#quiz-question");
 var highScoresEl = document.querySelector("#high-scores-section");
 var timerEl = document.querySelector("#timer");
 var rightOrWrongEl = document.querySelector("#right-or-wrong");
+var scoreSubmitBtn = document.querySelector("#score-submit-btn");
+var highScoresListEl = document.querySelector("#high-scores-list");
+var initialsInputEl = document.querySelector("#initials-input");
+var highScoresMessageEl = document.querySelector("#high-scores-message");
 
 var TIMER_START_SECONDS = 60;
 
@@ -78,9 +82,11 @@ function moveToQuestion(nextQuestionIndex) {
         li.addEventListener("click", function(event) {
             if (event.target.textContent === currentQuestion.correctAnswer) {
                 timer += 5; // timer = timer + 5
+                timerEl.textContent = timer;
                 rightOrWrongEl.textContent = "Correct!";
             } else {
                 timer -= 5; // timer = timer - 5
+                timerEl.textContent = timer;
                 rightOrWrongEl.textContent = "Wrong!";
             }
 
@@ -99,4 +105,56 @@ function handleEndOfQuiz() {
     startQuizBtn.setAttribute("style", "display: block;");
     startQuizBtn.textContent = "Try Again";
     clearInterval(timerIntervalId);
+    highScoresListEl.setAttribute("style", "display: none;");
+    document.querySelector("#initials-input-section").setAttribute("style", "display: block;")
 }
+
+function submitScore() {
+    var userInitials = initialsInputEl.value;
+
+    if (userInitials.length !== 2) {
+        highScoresEl.textContent = "You must input 2 letters for your initials!"
+        return;
+    }
+
+    var highScores = localStorage.getItem("highScores");
+
+    if (highScores === null) {
+        highScores = [];
+    } else {
+        highScores = JSON.parse(highScores);
+    }
+
+    highScores.push({
+        initials: userInitials,
+        score: timer
+    });
+
+    // sort the high scores
+    highScores = highScores.sort(function(a, b) {
+        return b.score - a.score;
+    });
+
+    localStorage.setItem("highScores", JSON.stringify(highScores));
+
+    displayHighScores(highScores);
+
+    initialsInputEl.value = "";
+    document.querySelector("#initials-input-section").setAttribute("style", "display: none;")
+}
+
+function displayHighScores(highScores) {
+    highScoresListEl.innerHTML = "";
+    for (var i = 0; i < highScores.length; i++) {
+        var currentScore = highScores[i];
+
+        var li = document.createElement("li");
+        li.textContent = `${currentScore.initials}: ${currentScore.score}`;
+
+        highScoresListEl.appendChild(li);
+    }
+    highScoresListEl.setAttribute("style", "display: block;");
+
+}
+
+scoreSubmitBtn.addEventListener("click", submitScore);
