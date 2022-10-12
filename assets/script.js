@@ -7,6 +7,7 @@ var rightOrWrongEl = document.querySelector("#right-or-wrong");
 var scoreSubmitBtn = document.querySelector("#score-submit-btn");
 var highScoresListEl = document.querySelector("#high-scores-list");
 var initialsInputEl = document.querySelector("#initials-input");
+var initialsInputSectionEl = document.querySelector("#initials-input-section");
 var highScoresMessageEl = document.querySelector("#high-scores-message");
 
 var TIMER_START_SECONDS = 60;
@@ -37,14 +38,12 @@ var questions = [
     }
 ];
 
-startQuizBtn.addEventListener("click", startQuiz);
-
 function startQuiz() {
     initTimer();
     moveToQuestion(0);
     
-    highScoresEl.setAttribute("style", "display: none;");
-    startQuizBtn.setAttribute("style", "display: none;");
+    hideElement(highScoresEl);
+    hideElement(startQuizBtn);
 }
 
 function initTimer() {
@@ -62,30 +61,26 @@ function initTimer() {
 }
 
 function moveToQuestion(nextQuestionIndex) {
-    // check if we've reached the end of the quiz
     if (nextQuestionIndex >= questions.length) {
         handleEndOfQuiz();
         return;
     }
 
-    // get the next question from the questions array
     var currentQuestion = questions[nextQuestionIndex];
-    // delete any answers displayed from the last question
     possibleAnswersEl.innerHTML = "";
-    // render the question
     quizQuestionEl.textContent = currentQuestion.question;
-    // render the possible answers
+
     for (var i = 0; i < currentQuestion.possibleAnswers.length; i++) {
         var li = document.createElement("li");
         li.textContent = currentQuestion.possibleAnswers[i];
 
         li.addEventListener("click", function(event) {
             if (event.target.textContent === currentQuestion.correctAnswer) {
-                timer += 5; // timer = timer + 5
+                timer += 5;
                 timerEl.textContent = timer;
                 rightOrWrongEl.textContent = "Correct!";
             } else {
-                timer -= 5; // timer = timer - 5
+                timer -= 5;
                 timerEl.textContent = timer;
                 rightOrWrongEl.textContent = "Wrong!";
             }
@@ -98,15 +93,16 @@ function moveToQuestion(nextQuestionIndex) {
 }
 
 function handleEndOfQuiz() {
-    // this is the end of the quiz;
+    clearInterval(timerIntervalId);
+    
     quizQuestionEl.textContent = "";
     possibleAnswersEl.innerHTML = "";
-    highScoresEl.setAttribute("style", "display: block;");
-    startQuizBtn.setAttribute("style", "display: block;");
     startQuizBtn.textContent = "Try Again";
-    clearInterval(timerIntervalId);
-    highScoresListEl.setAttribute("style", "display: none;");
-    document.querySelector("#initials-input-section").setAttribute("style", "display: block;")
+    
+    showElement(highScoresEl);
+    showElement(startQuizBtn);
+    showElement(initialsInputSectionEl);
+    hideElement(highScoresListEl);
 }
 
 function submitScore() {
@@ -140,7 +136,7 @@ function submitScore() {
     displayHighScores(highScores);
 
     initialsInputEl.value = "";
-    document.querySelector("#initials-input-section").setAttribute("style", "display: none;")
+    hideElement(initialsInputSectionEl);
 }
 
 function displayHighScores(highScores) {
@@ -153,8 +149,17 @@ function displayHighScores(highScores) {
 
         highScoresListEl.appendChild(li);
     }
-    highScoresListEl.setAttribute("style", "display: block;");
 
+    showElement(highScoresListEl);
+}
+
+function showElement(element) {
+    element.setAttribute("style", "display: block;");
+}
+
+function hideElement(element) {
+    element.setAttribute("style", "display: none;");
 }
 
 scoreSubmitBtn.addEventListener("click", submitScore);
+startQuizBtn.addEventListener("click", startQuiz);
