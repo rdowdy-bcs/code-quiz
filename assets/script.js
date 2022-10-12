@@ -2,6 +2,7 @@ var startQuizBtn = document.querySelector("#start-quiz-btn");
 var possibleAnswersEl = document.querySelector("#possible-answers");
 var quizQuestionEl = document.querySelector("#quiz-question");
 var highScoresEl = document.querySelector("#high-scores-section");
+var highScoresMessageEl = document.querySelector("#high-scores-message");
 var timerEl = document.querySelector("#timer");
 var rightOrWrongEl = document.querySelector("#right-or-wrong");
 var scoreSubmitBtn = document.querySelector("#score-submit-btn");
@@ -109,7 +110,7 @@ function submitScore() {
     var userInitials = initialsInputEl.value;
 
     if (userInitials.length !== 2) {
-        highScoresEl.textContent = "You must input 2 letters for your initials!"
+        highScoresMessageEl.textContent = "You must input 2 letters for your initials!"
         return;
     }
 

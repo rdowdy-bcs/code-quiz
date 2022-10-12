@@ -1,20 +1,68 @@
+html, body {
+    font-family: sans-serif;
+}
+
+header,
+section {
+    text-align: center;
+}
+
 header h1 {
     text-align: center;
 }
 
-header button {
+button {
     width: 100px;
     height: 40px;
     font-size: 16px;
     font-weight: bold;
+
+    margin: 0 auto;
 }
 
-#possible-answers li {
+ul#possible-answers {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#possible-answers li,
+#high-scores-list li {
     font-size: 24px;
     list-style: none;
     height: 40px;
+    background-color: #ddd;
+    margin-bottom: 10px;
+    padding: 10px 5px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#possible-answers li:hover {
+    background-color: #aaa;
+    cursor: pointer;
 }
 
 #high-scores-section {
     display: none;
+}
+
+#initials-input {
+    height: 40px;
+    width: 80px;
+    font-size: 18px;
+    padding: 5px;
+    font-weight: bold;
+}
+
+#high-scores-list {
+    display: block;
+    padding: 0;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#high-scores-list li:nth-child(even) {
+    background-color: #bbb;
 }
